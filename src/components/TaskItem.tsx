@@ -4,7 +4,21 @@ import { useTasks } from "../contexts/useTask";
 import { TaskForm } from "./TaskForm";
 import { Modal } from "./Modal";
 
-export const TaskItem: React.FC<{ task: Task }> = ({ task }) => {
+interface TaskItemProps {
+  task: Task;
+  isDragging?: boolean;
+  onDragStart: (e: React.DragEvent) => void;
+  onDrop: (e: React.DragEvent) => void;
+  onDragEnd: () => void;
+}
+
+export const TaskItem: React.FC<TaskItemProps> = ({ 
+  task, 
+  isDragging = false, 
+  onDragStart, 
+  onDrop, 
+  onDragEnd 
+}) => {
   const { deleteTask } = useTasks();
   const [isEditing, setIsEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -18,7 +32,14 @@ export const TaskItem: React.FC<{ task: Task }> = ({ task }) => {
   const formattedDate = new Date(task.createdAt).toLocaleString();
 
   return (
-    <div className="task-item">
+    <div
+      draggable
+      onDragStart={onDragStart}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
+      onDragOver={(e) => e.preventDefault()}
+      className={`task-item ${isDragging ? 'dragging' : ''}`}
+    >
       <div className="meta">
         <h3>{task.title}</h3>
         <div className="priority">{task.priority}</div>
@@ -38,7 +59,7 @@ export const TaskItem: React.FC<{ task: Task }> = ({ task }) => {
           </button>
         </div>
       </div>
-
+      
       <Modal
         isOpen={isViewing}
         onClose={() => setIsViewing(false)}

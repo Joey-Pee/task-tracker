@@ -33,6 +33,9 @@ export const TaskForm: React.FC<Props> = ({ initial = {}, onClose }) => {
       setDescription("");
       setPriority("Medium");
     }
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
