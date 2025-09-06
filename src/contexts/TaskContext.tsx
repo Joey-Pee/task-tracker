@@ -9,6 +9,7 @@ export type TasksContextValue = {
     updates: Partial<Omit<Task, "id" | "createdAt">>
   ) => void;
   deleteTask: (id: string) => void;
+  reorderTasks: (startIndex: number, endIndex: number) => void;
 };
 
 export const TasksContext = createContext<TasksContextValue | undefined>(

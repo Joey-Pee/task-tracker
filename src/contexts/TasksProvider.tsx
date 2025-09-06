@@ -27,8 +27,17 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({
   const deleteTask: TasksContextValue["deleteTask"] = (id) =>
     setTasks((prev) => prev.filter((t) => t.id !== id));
 
+  const reorderTasks: TasksContextValue["reorderTasks"] = (startIndex, endIndex) => {
+    setTasks((prev) => {
+      const result = Array.from(prev);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    });
+  };
+
   return (
-    <TasksContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
+    <TasksContext.Provider value={{ tasks, addTask, updateTask, deleteTask, reorderTasks }}>
       {children}
     </TasksContext.Provider>
   );
